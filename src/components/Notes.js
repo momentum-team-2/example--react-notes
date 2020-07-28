@@ -1,15 +1,13 @@
 import React from 'react'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 
 export default class Notes extends React.Component {
   constructor () {
     super()
     this.state = {
-      notes: [],
-      newNoteText: ''
+      notes: []
     }
-
-    this.handleCreateNewNote = this.handleCreateNewNote.bind(this)
   }
 
   componentDidMount () {
@@ -36,37 +34,17 @@ export default class Notes extends React.Component {
       })
   }
 
-  handleCreateNewNote (e) {
-    e.preventDefault()
-    axios.post('https://notes-api.glitch.me/api/notes', {
-      text: this.state.newNoteText
-    }, {
-      auth: this.props.auth
-    })
-      .then(res => {
-        this.setState({
-          notes: this.state.notes.concat([res.data]),
-          newNoteText: ''
-        })
-      })
-  }
-
   render () {
-    const { notes, newNoteText } = this.state
+    const { notes } = this.state
     return (
       <div>
         <h1>Your notes</h1>
         {notes.map(note =>
-          <div key={note._id}>{note.text}</div>
+          <div key={note._id}>
+            {note.text} {' '}
+            <Link to={`/edit/${note._id}`}>Edit</Link>
+          </div>
         )}
-        <form onSubmit={this.handleCreateNewNote}>
-          <textarea
-            placeholder='Add a new note'
-            value={newNoteText}
-            onChange={e => this.setState({ newNoteText: e.target.value })}
-          />
-          <p><button type='submit'>Create new note</button></p>
-        </form>
       </div>
     )
   }

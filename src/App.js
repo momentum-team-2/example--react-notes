@@ -2,6 +2,11 @@ import React from 'react'
 import './App.css'
 import Login from './components/Login'
 import Notes from './components/Notes'
+import NewNote from './components/NewNote'
+import EditNote from './components/EditNote'
+import {
+  BrowserRouter as Router, Switch, Route, Link
+} from 'react-router-dom'
 
 class App extends React.Component {
   constructor () {
@@ -31,18 +36,38 @@ class App extends React.Component {
   render () {
     const { auth } = this.state
     return (
-      <div className='App'>
-        {auth
-          ? (
-            <div>
-              <p>Hello, {auth.username}</p>
-              <p><button onClick={() => this.setAuthCredentials(null)}>Log out</button></p>
-              <Notes auth={auth} setAuthCredentials={this.setAuthCredentials} />
-            </div>
-          )
-          : <Login setAuthCredentials={this.setAuthCredentials} />}
+      <Router>
+        <div className='App'>
+          {auth
+            ? (
+              <div>
+                <p>Hello, {auth.username}</p>
+                <p><button onClick={() => this.setAuthCredentials(null)}>Log out</button></p>
+                <nav>
+                  <ul>
+                    <li><Link to='/'>All notes</Link></li>
+                    <li><Link to='/new-note'>Create new note</Link></li>
+                  </ul>
+                </nav>
+                <Switch>
+                  <Route
+                    path='/edit/:noteId' render={({ match }) => (
+                      <EditNote auth={auth} noteId={match.params.noteId} />
+                    )}
+                  />
+                  <Route path='/new-note'>
+                    <NewNote auth={auth} />
+                  </Route>
+                  <Route path='/'>
+                    <Notes auth={auth} setAuthCredentials={this.setAuthCredentials} />
+                  </Route>
+                </Switch>
+              </div>
+            )
+            : <Login setAuthCredentials={this.setAuthCredentials} />}
 
-      </div>
+        </div>
+      </Router>
     )
   }
 }
