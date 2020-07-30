@@ -4,7 +4,6 @@ import Login from './components/Login'
 import Notes from './components/Notes'
 import NewNote from './components/NewNote'
 import EditNote from './components/EditNoteWithHooks'
-import OldEditNote from './components/EditNote'
 import {
   BrowserRouter as Router, Switch, Route, Link
 } from 'react-router-dom'
