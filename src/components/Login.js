@@ -6,7 +6,8 @@ export default class Login extends React.Component {
     super()
     this.state = {
       username: '',
-      password: ''
+      password: '',
+      error: null
     }
     this.handleLogin = this.handleLogin.bind(this)
   }
@@ -27,13 +28,23 @@ export default class Login extends React.Component {
           })
         }
       })
+      .catch(err => {
+        if (err.response && err.response.status === 401) {
+          this.setState({
+            error: 'There is no user with that username and password.'
+          })
+        }
+      })
   }
 
   render () {
-    const { username, password } = this.state
+    const { username, password, error } = this.state
 
     return (
       <form onSubmit={this.handleLogin}>
+        {error && (
+          <div style={{ color: 'red' }}>{error}</div>
+        )}
         <p>
           <label htmlFor='username'>Username</label>
           <input
