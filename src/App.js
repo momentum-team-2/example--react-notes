@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import './App.css'
+import 'tachyons'
 import Login from './components/Login'
 import Notes from './components/Notes'
 import NewNote from './components/NewNote'
@@ -7,6 +8,8 @@ import EditNote from './components/EditNoteWithHooks'
 import {
   BrowserRouter as Router, Switch, Route, Link
 } from 'react-router-dom'
+
+import { login } from './api'
 
 export default function App () {
   let authFromStorage = window.sessionStorage.getItem('auth')
@@ -27,7 +30,7 @@ export default function App () {
 
   return (
     <Router>
-      <div className='App'>
+      <div className='App mw8 center'>
         {auth
           ? (
             <div>
@@ -52,7 +55,7 @@ export default function App () {
               </Switch>
             </div>
           )
-          : <Login setAuthCredentials={setAuthCredentials} />}
+          : <Login login={login} setAuthCredentials={setAuthCredentials} />}
 
       </div>
     </Router>

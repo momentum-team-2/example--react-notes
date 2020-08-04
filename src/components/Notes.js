@@ -39,12 +39,14 @@ export default class Notes extends React.Component {
     return (
       <div>
         <h1>Your notes</h1>
-        {notes.map(note =>
-          <div key={note._id}>
-            {note.text} {' '}
-            <Link to={`/edit/${note._id}`}>Edit</Link>
-          </div>
-        )}
+        <div class='flex flex-wrap'>
+          {notes.map(note =>
+            <div key={note._id} class='mw5 ba bw1 pa2 mr2 mb3'>
+              {note.text} {' '}
+              <Link to={`/edit/${note._id}`}>Edit</Link>
+            </div>
+          )}
+        </div>
       </div>
     )
   }

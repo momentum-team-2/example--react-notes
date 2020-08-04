@@ -1,5 +1,5 @@
 import React from 'react'
-import axios from 'axios'
+import PropTypes from 'prop-types'
 
 export default class Login extends React.Component {
   constructor () {
@@ -14,26 +14,19 @@ export default class Login extends React.Component {
 
   handleLogin (event) {
     event.preventDefault()
-    axios.get('https://notes-api.glitch.me/api/notes', {
-      auth: {
-        username: this.state.username,
-        password: this.state.password
-      }
-    })
-      .then(res => {
-        if (res.status === 200) {
-          this.props.setAuthCredentials({
-            username: this.state.username,
-            password: this.state.password
-          })
-        }
-      })
+    const { username, password } = this.state
+    this.props.login(username, password)
+      .then(
+        this.props.setAuthCredentials({
+          username: username,
+          password: password
+        })
+      )
       .catch(err => {
-        if (err.response && err.response.status === 401) {
-          this.setState({
-            error: 'There is no user with that username and password.'
-          })
-        }
+        console.log(err)
+        this.setState({
+          error: 'There is no user with that username and password.'
+        })
       })
   }
 
@@ -47,6 +40,8 @@ export default class Login extends React.Component {
         )}
         <p>
           <label htmlFor='username'>Username</label>
+        </p>
+        <p>
           <input
             id='username'
             type='text'
@@ -56,6 +51,8 @@ export default class Login extends React.Component {
         </p>
         <p>
           <label htmlFor='password'>Password</label>
+        </p>
+        <p>
           <input
             id='password'
             type='password'
@@ -69,4 +66,9 @@ export default class Login extends React.Component {
       </form>
     )
   }
+}
+
+Login.propTypes = {
+  setAuthCredentials: PropTypes.func.isRequired,
+  login: PropTypes.func.isRequired
 }
